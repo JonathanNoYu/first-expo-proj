@@ -1,7 +1,7 @@
+import { PushNotificationState, usePushNotifications } from '@/src/hooks/usePushNotifications';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import { useEffect, useState } from 'react';
 import { Button, Platform, Text, View } from 'react-native';
 
 
@@ -85,29 +85,9 @@ async function registerForPushNotificationsAsync() {
 }
 
 export default function App() {
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState<Notifications.Notification | undefined>(
-    undefined
-  );
-
-  useEffect(() => {
-    registerForPushNotificationsAsync()
-      .then(token => setExpoPushToken(token ?? ''))
-      .catch((error: any) => setExpoPushToken(`${error}`));
-
-    const notificationListener = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
-
-    const responseListener = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
-
-    return () => {
-      notificationListener.remove();
-      responseListener.remove();
-    };
-  }, []);
+  const notifData:PushNotificationState = usePushNotifications()
+  const expoPushToken = notifData.expoPushToken?.data ?? ''
+  const notification = notifData.notification
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around', backgroundColor: "#acacac",}}>
