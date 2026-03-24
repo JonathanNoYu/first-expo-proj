@@ -5,10 +5,11 @@ import { Image } from 'expo-image';
 import { Link, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useRef, useState } from 'react';
-import { Alert, Pressable, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { Alert, Pressable, TextInput, TouchableOpacity } from 'react-native';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import LoadingScreen from '../components/loading-screen';
 import ScrollableKeyBoardView from '../components/scrollableKeyBoardView';
+import { styles } from '../constants/mobile/mobile_forum';
 
 export default function SignIn() {
   const router = useRouter();
@@ -30,9 +31,9 @@ export default function SignIn() {
   }
   return (
     <ScrollableKeyBoardView style={styles.container}>
-      <StatusBar style="dark" />
-      <ThemedView style={styles.image}>
-        <Image style={styles.image} source={require('../assets/images/login-illustration.png')}/>
+      <StatusBar style="auto" />
+      <ThemedView>
+        <Image style={styles.image_log_in} source={require('../assets/images/login-illustration.png')}/>
       </ThemedView>
       {/* Inputs View */}
       <ThemedView style={{gap:10}}>
@@ -76,7 +77,7 @@ export default function SignIn() {
             ):(
               <ThemedView>
                 <TouchableOpacity style={styles.submit_button} onPress={handleLogIn}>
-                  <ThemedText style={styles.sign_in} type='title'>Log In</ThemedText>
+                  <ThemedText style={styles.submit_text} type='title'>Log In</ThemedText>
                 </TouchableOpacity>
               </ThemedView>
               )
@@ -87,7 +88,7 @@ export default function SignIn() {
       <ThemedView style={styles.more_options_container}>
         <ThemedText style={styles.grey_small_text}>Don't have an account?   </ThemedText>
         <Pressable onPress={() => router.replace('/signUp')}>
-          <ThemedText style={styles.sign_up}>Sign up</ThemedText>
+          <ThemedText style={styles.more_option_text}>Sign up</ThemedText>
         </Pressable>
       </ThemedView>
       <Link href="/" dismissTo style={styles.link}>
@@ -96,72 +97,3 @@ export default function SignIn() {
     </ScrollableKeyBoardView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  input_background: {
-    flexDirection: 'row',
-    gap: 4,
-    width: wp(85),
-    height: hp(5),
-    backgroundColor: '#aaaaaa',
-    paddingHorizontal: 4,
-    borderRadius: 10,
-  },
-  inputs: {
-    fontSize: hp(2),
-    flex: 1,
-    fontWeight: 'semibold',
-    color: "#404040",
-  },
-  grey_small_text: {
-    fontSize: hp(1.8),
-    textAlign: 'right',
-    color: "#5f5f5f",
-  },
-  submit_button: {
-    height: hp(6.5),
-    backgroundColor: '#624494',
-    borderRadius: 10,
-    justifyContent: 'center',
-  },
-  sign_in: {
-    height: hp(3.8),
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    letterSpacing: wp(0.6),
-    textAlign: 'center',
-    overflow: 'visible',
-  },
-  more_options_container: {
-    flexDirection: 'row',
-    marginTop: hp(1)
-  },
-  sign_up: {
-    fontSize: hp(1.8),
-    fontWeight: 'semibold',
-    color: '#624494',
-  },
-  password_eye: {
-    justifyContent: 'center',
-    marginRight: hp(0.85),
-  },
-  image: {
-    alignSelf:'center',
-    gap: 12,
-    height:hp(35),
-    width: wp(85),
-    marginBottom: hp(2),
-    paddingTop: 0,
-    marginTop: 0
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
-  },
-});
