@@ -13,7 +13,7 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image
-          source={require('@/src/assets/images/BDBF_Home_Page_BG_Image.avif')}
+          source={require('@/src/assets/images/BDBF_Home_Page_BG_Image.png')}
           style={styles.bdbf_home_page_bg_image}
         />
       }>
