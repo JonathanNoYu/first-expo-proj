@@ -1,12 +1,12 @@
 import { Image } from 'expo-image';
 import { Alert, Button, Platform, StyleSheet } from 'react-native';
 
-import { HelloWave } from '@/src/components/hello-wave';
-import ParallaxScrollView from '@/src/components/parallax-scroll-view';
-import { ThemedText } from '@/src/components/themed-text';
-import { ThemedView } from '@/src/components/themed-view';
+import { HelloWave } from '@/components/hello-wave';
+import ParallaxScrollView from '@/components/parallax-scroll-view';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
 import { Link, useRouter } from 'expo-router';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/use-auth';
 
 export default function HomeScreen() {
   const router = useRouter()
@@ -30,7 +30,7 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image
-          source={require('@/src/assets/images/BDBF_Home_Page_BG_Image.png')}
+          source={require('@/assets/images/BDBF_Home_Page_BG_Image.png')}
           style={styles.bdbf_home_page_bg_image}
         />
       }>

@@ -3,9 +3,9 @@ import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { AuthContextProvider } from '../context/authContext.js';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/use-auth';
 
-import { useColorScheme } from '@/src/hooks/use-color-scheme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useEffect } from 'react';
 
 export const unstable_settings = {
@@ -22,9 +22,9 @@ const MainLayout = () => {
     if (typeof isAuthenticated === "undefined" || isAuthenticated === undefined) return;
     const inApp = segements[0] == '(tabs)';
     if (isAuthenticated && !inApp) {
-      router.push('/(tabs)');
+      router.replace('/(tabs)');
     } else if (!isAuthenticated) {
-      router.push('/signIn')
+      router.replace('/signIn')
     }
   },[isAuthenticated])
 

@@ -1,4 +1,4 @@
-import { useThemeColor } from '@/src/hooks/use-theme-color';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import { KeyboardAvoidingView, Platform, ScrollView, ViewProps } from "react-native";
 
 export type ScrollableKeyBoardViewProps = ViewProps & {

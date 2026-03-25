@@ -1,5 +1,9 @@
-import { ThemedText } from '@/src/components/themed-text';
-import { ThemedView } from '@/src/components/themed-view';
+import LoadingScreen from '@/components/loading-screen';
+import ScrollableKeyBoardView from '@/components/scrollable-keyboard-view';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { styles } from '@/constants/mobile/mobile_forum';
+import { useAuth } from '@/hooks/use-auth';
 import { Feather, FontAwesome5, Ionicons, Octicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Link, useRouter } from 'expo-router';
@@ -7,10 +11,6 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useRef, useState } from 'react';
 import { Alert, Pressable, TextInput, TouchableOpacity } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import LoadingScreen from '../components/loading-screen';
-import ScrollableKeyBoardView from '../components/scrollableKeyBoardView';
-import { styles } from '../constants/mobile/mobile_forum';
-import { useAuth } from '../hooks/useAuth';
 
 export default function SignUp() {
   const router = useRouter();

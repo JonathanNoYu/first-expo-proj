@@ -1,4 +1,4 @@
-import { PushNotificationState, usePushNotifications } from '@/src/hooks/usePushNotifications';
+import { PushNotificationState, usePushNotifications } from '@/hooks/use-push-notifications';
 import * as Notifications from 'expo-notifications';
 import { Button, Text, View } from 'react-native';
 
@@ -11,8 +11,6 @@ Notifications.setNotificationHandler({
     shouldShowList: true,
   }),
 });
-
-
 
 async function sendPushNotification(expoPushToken: string) {
   const message = {
