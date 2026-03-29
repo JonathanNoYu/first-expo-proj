@@ -2,7 +2,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeApp } from "firebase/app";
 import { browserLocalPersistence, getReactNativePersistence, initializeAuth } from "firebase/auth";
-import { collection, getFirestore } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import { Platform } from 'react-native';
 
 // Your web app's Firebase configuration
@@ -34,6 +34,3 @@ if (Platform.OS != 'web') {
 export const auth = initializeAuth(app, authDeps)
 
 export const db = getFirestore(app)
-
-export const usersRef = collection(db, 'users')
-export const teamsRef = collection(db, 'teams')

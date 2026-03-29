@@ -3,7 +3,7 @@ import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from 'expo-notifications';
 import { useRouter } from "expo-router";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Platform } from "react-native";
 import { useAuth } from "./use-auth";
@@ -34,27 +34,34 @@ export const usePushNotifications = (): PushNotificationState => {
 
     async function addPushNotificationTokenToFirestore(token: Notifications.ExpoPushToken | undefined) {
         // Add push token to database (takes a second to perform due to 2 await calls)
-        try {
-            if (isAuthenticated && user != null && token !== undefined) {
-                // Get existing push tokens (from other devices but same user)
-                const moreDocs = await getDoc(doc(db_firebase, "users", user.uid))
-                if (moreDocs.exists()) {
+        if (isAuthenticated && user != null && token !== undefined) {
+            // Get existing push tokens (from other devices but same user)
+            let moreDocs = undefined;
+            try {
+                moreDocs = await getDoc(doc(db_firebase, "users", user.uid))
+            } catch(err) {
+                console.log('Error in getting user doc from firestore', err)
+            }
+            try {
+                if (moreDocs != undefined && moreDocs.exists()) {
                     // Get past user data and updated push token (filters for unique tokens)
                     const pastUserData = moreDocs.data()
                     const allTokens = [...pastUserData.pushNotifToken, token].map((t) => t.data)
                     const noDupTokens = [...new Set(allTokens)].filter((t) => t !== undefined)
-                    const docRes = await setDoc(doc(db_firebase, "users", user.uid), {
+                    const docRes = await updateDoc(doc(db_firebase, "users", user.uid), {
                         ...pastUserData,
                         pushNotifToken: noDupTokens,
                     })
                 } else {
-                    console.log("Could not find user in firestore")
+                    await updateDoc(doc(db_firebase, "users", user.uid), {
+                        pushNotifToken: [token],
+                    })
                 }
-            } else {
-                console.log("No user or Token found")
+            } catch(err) {
+                console.log('Error in Adding Push Notfi token to firestore', err)
             }
-        } catch(err) {
-            console.log('Error in Adding Push Notfi token to firestore', err)
+        } else {
+            console.log("No user or Token found")
         }
     }
 
@@ -91,6 +98,7 @@ export const usePushNotifications = (): PushNotificationState => {
                     lightColor: "#FF231F7C",
                 });
             }
+            console.log(token)
             return token;
         }
         return undefined
