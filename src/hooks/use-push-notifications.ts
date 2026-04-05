@@ -46,15 +46,18 @@ export const usePushNotifications = (): PushNotificationState => {
                 if (moreDocs != undefined && moreDocs.exists()) {
                     // Get past user data and updated push token (filters for unique tokens)
                     const pastUserData = moreDocs.data()
-                    const allTokens = [...pastUserData.pushNotifToken, token].map((t) => t.data)
-                    const noDupTokens = [...new Set(allTokens)].filter((t) => t !== undefined)
+                    let allTokens = [token.data]
+                    if (pastUserData.push_notif_token) {
+                        allTokens = [...pastUserData.push_notif_token, token.data]
+                    }
+                    const noDupTokens = [...new Set(allTokens)].filter((t) => t !== undefined || t !== "")
                     const docRes = await updateDoc(doc(db_firebase, "users", user.uid), {
                         ...pastUserData,
-                        push_motif_token: noDupTokens,
+                        push_notif_token: noDupTokens,
                     })
                 } else {
                     await updateDoc(doc(db_firebase, "users", user.uid), {
-                        push_motif_token: [token],
+                        push_notif_token: [token],
                     })
                 }
             } catch(err) {
