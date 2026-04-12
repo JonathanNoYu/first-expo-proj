@@ -1,16 +1,15 @@
-import { race_styles, raceData } from "@/constants/race"
+import { race_styles, RaceData } from "@/constants/race"
 import { msToTime } from "@/scripts/time-utility"
-import { Timestamp } from "firebase/firestore"
 import { ScrollView } from "react-native"
 import { ThemedText } from "./themed-text"
 import { ThemedView } from "./themed-view"
 
 export type RaceListDisplayProps = {
-    races: raceData[]
+    races: RaceData[]
 }
 
 export type RaceDataDisplayProps = {
-    race: raceData
+    race: RaceData
 }
 
 export function RaceListDisplay({ races }: RaceListDisplayProps) {
@@ -26,25 +25,15 @@ export function RaceListDisplay({ races }: RaceListDisplayProps) {
 }
 
 export function RaceDataDisplay({ race } : RaceDataDisplayProps) {
-    let schedule_timestamp = new Timestamp(race?.schedule_timestamp.seconds, race?.schedule_timestamp.nanoseconds).toDate().toLocaleString(undefined, {
-        year: '2-digit',
-        month: "numeric",
-        day: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-    })
-    let raceNum: number = race?.race_num
-    let timeArray: string[] = race?.completed_time_ms
-    let teamArray: string[] = race?.teams
-    let raceColor = (timeArray && timeArray.length == 0) ? "#9e9156" : "#49b42e"
+    let timeArray = race.completed_time_ms
     return (
         <ThemedView style={{ ...race_styles.raceDataContianer }}>
-            <ThemedView style={{ ...race_styles.raceAndSchedule, backgroundColor: raceColor }}>
-                <ThemedText>Race {raceNum}</ThemedText>
-                <ThemedText>{schedule_timestamp}</ThemedText>
+            <ThemedView style={{ ...race_styles.raceAndSchedule, backgroundColor: race.background_color }}>
+                <ThemedText>Race {race.race_num}</ThemedText>
+                <ThemedText>{race.schedule_timestamp}</ThemedText>
             </ThemedView>
             {
-                teamArray.map((team, index: number) => {
+                race.teams.map((team, index: number) => {
                     let completedTimeOrDNF;
                     if (timeArray.length > 0) { // Check if Race has started yet
                         completedTimeOrDNF = timeArray[index] && timeArray[index] != 'DNF' ? msToTime(timeArray[index]) : 'DNF'
@@ -52,7 +41,7 @@ export function RaceDataDisplay({ race } : RaceDataDisplayProps) {
                         completedTimeOrDNF = "TBD" // Yet to Race
                     }
                     return (
-                        <ThemedView key={raceNum + ' ' + index} style={race_styles.timesAndTeam}>
+                        <ThemedView key={race.race_num + ' ' + index} style={race_styles.timesAndTeam}>
                             <ThemedText>{team}</ThemedText>
                             <ThemedText>{completedTimeOrDNF}</ThemedText>
                         </ThemedView>

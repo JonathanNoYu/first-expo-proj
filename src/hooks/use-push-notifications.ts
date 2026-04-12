@@ -117,7 +117,7 @@ export const usePushNotifications = (): PushNotificationState => {
                 if (data.goto) {
                     switch(data.goto) {
                         case '/races':
-                            router.push('/races');
+                            router.push('/racesPage');
                             break
                         }
                 };

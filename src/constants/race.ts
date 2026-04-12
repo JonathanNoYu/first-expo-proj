@@ -1,11 +1,12 @@
 import { StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
-export type raceData = { 
-    schedule_timestamp: { seconds: number; nanoseconds: number }; 
+export type RaceData = { 
+    schedule_timestamp: string; 
     race_num: number; 
     completed_time_ms: string[]; 
-    teams: string[] 
+    teams: string[]
+    background_color: string
 }
 
 export const race_styles = StyleSheet.create({

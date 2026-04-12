@@ -1,6 +1,7 @@
 import { thisYear } from "@/constants/dates"
 import { db_firebase } from "@/constants/firestore"
-import { collection, DocumentData, onSnapshot, orderBy, query, where } from "firebase/firestore"
+import { RaceData } from "@/constants/race"
+import { collection, DocumentData, onSnapshot, orderBy, query, Timestamp, where } from "firebase/firestore"
 import { useEffect, useState } from "react"
 
 /**
@@ -24,25 +25,52 @@ import { useEffect, useState } from "react"
  * @returns races
  */
 export const useFirestoreRaces = () => {
-    const [races, setRaces] = useState<DocumentData[]>([])
+    const [races, setRaces] = useState<RaceData[]>([])
+
+    const documentDataToRaceData = (docData: DocumentData): RaceData | undefined => {
+        let scheduleTimestamp = new Timestamp(docData?.schedule_timestamp.seconds, docData?.schedule_timestamp.nanoseconds).toDate().toLocaleString(undefined, {
+                year: '2-digit',
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit",
+        })
+        let raceNum: number = docData?.race_num
+        let timeArray: string[] = docData?.completed_time_ms
+        let teamArray: string[] = docData?.teams
+        let raceColor = (timeArray && timeArray.length == 0) ? "#9e9156" : "#49b42e"
+        return {
+            schedule_timestamp: scheduleTimestamp,
+            race_num: raceNum,
+            completed_time_ms: timeArray,
+            teams: teamArray,
+            background_color: raceColor
+        }
+    }
 
     /**
      * returns next uncompleted race from firestore otherwise it returns null (i.e. returns null if all races are completed)
      * 
      * @returns 
      */
-    const nextUpcomingRace = (teamName: (string | undefined) = undefined): DocumentData | null => {
+    const nextUpcomingRace = (teamName: (string | undefined) = undefined): RaceData | undefined => {
         for (let i = 0; i < races.length; i++) {
-            let timeArray = races[i]?.completed_time_ms
+            let timeArray = races[i].completed_time_ms
             if (timeArray && timeArray.length != 0) {
-                let nextRace = races[i - 1]
+                let nextRace
                 // Checks that index is not out of bounds and if teamname exists check if it is in the nextRace teams array.
-                if (i - 1 != 0 && (!teamName || nextRace.teams.include(teamName))) {
-                    return nextRace
+                while (i > 0) {
+                    i = i - 1
+                    console.log(i)
+                    nextRace = races[i]
+                    if (!teamName || nextRace.teams.includes(teamName)) {
+                        return nextRace
+                    }
                 }
+                return undefined
             }
         }
-        return null
+        return undefined
     }
 
     useEffect(() => {
@@ -50,13 +78,15 @@ export const useFirestoreRaces = () => {
             where("schedule_timestamp", ">=", thisYear),
             orderBy("schedule_timestamp", 'desc'));
         const unsub = onSnapshot(q, (querySnapshot) => {
-          let allRaces = querySnapshot.docs.map((doc) => doc.data())
-          setRaces([...allRaces])
+          let allRaces = querySnapshot.docs.map((doc) => documentDataToRaceData(doc.data()))
+          let noUndefinedRaces = allRaces.filter((race) => race != undefined)
+          setRaces([...noUndefinedRaces])
           })
           return unsub
         }, [])
     return {
         races, 
         nextUpcomingRace,
+        documentDataToRaceData, // GET RID OF AFTER TESTING
     }
 }
