@@ -41,7 +41,7 @@ export default function SignIn() {
     }
   }
   return (
-    <ScrollableKeyBoardView style={styles.container}>
+    <ScrollableKeyBoardView style={styles.form_container}>
       <StatusBar style="auto" />
       <ThemedView>
         <Image style={styles.image_log_in} source={require('../assets/images/login-illustration.png')}/>

@@ -25,8 +25,11 @@ export default function SignUp() {
 
   const handleSignUp = async () => {
     if(!emailRef.current || !passwordRef.current || !nameRef.current || !teamRef.current) {
-      Alert.alert('Sign Un', 'Please fill all the fields!')
+      Alert.alert('Sign Up', 'Please fill all the fields!')
       return
+    }
+    if(nameRef.current.split(" ").length < 2) {
+      Alert.alert('Sing Up', 'Please enter at least first and last name!')
     }
 
     // Password Requirement Check
@@ -70,7 +73,7 @@ export default function SignUp() {
     }
   }
   return (
-    <ScrollableKeyBoardView style={styles.container}>
+    <ScrollableKeyBoardView style={styles.form_container}>
       <StatusBar style="auto" />
       <ThemedView>
         <Image style={styles.image_sign_up} source={require('../assets/images/sign-up-illustration.png')}/>

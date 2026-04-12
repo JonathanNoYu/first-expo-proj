@@ -27,7 +27,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="races"
+        name="racesPage"
         options={{
           title: 'Races',
           tabBarIcon: ({ color }) => <FontAwesome5 size={28} name="clipboard-list" color={color} />,
@@ -37,7 +37,14 @@ export default function TabLayout() {
         <Tabs.Screen
         name="app"
         options={{
-          title: 'Push Notifications',
+          title: 'Push Notif',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+        }}
+      />
+        <Tabs.Screen
+        name="paddler"
+        options={{
+          title: 'Paddler Info',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
         }}
       />
