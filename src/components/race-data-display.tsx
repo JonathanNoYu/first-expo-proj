@@ -1,7 +1,6 @@
 import { race_styles, raceData } from "@/constants/race"
 import { msToTime } from "@/scripts/time-utility"
 import { Timestamp } from "firebase/firestore"
-import { Key } from "react"
 import { ScrollView } from "react-native"
 import { ThemedText } from "./themed-text"
 import { ThemedView } from "./themed-view"
@@ -11,8 +10,7 @@ export type RaceListDisplayProps = {
 }
 
 export type RaceDataDisplayProps = {
-    race: raceData,
-    key: Key | number
+    race: raceData
 }
 
 export function RaceListDisplay({ races }: RaceListDisplayProps) {
@@ -27,7 +25,7 @@ export function RaceListDisplay({ races }: RaceListDisplayProps) {
     )
 }
 
-export function RaceDataDisplay({race , key} : RaceDataDisplayProps) {
+export function RaceDataDisplay({ race } : RaceDataDisplayProps) {
     let schedule_timestamp = new Timestamp(race?.schedule_timestamp.seconds, race?.schedule_timestamp.nanoseconds).toDate().toLocaleString(undefined, {
         year: '2-digit',
         month: "numeric",
@@ -40,21 +38,21 @@ export function RaceDataDisplay({race , key} : RaceDataDisplayProps) {
     let teamArray: string[] = race?.teams
     let raceColor = (timeArray && timeArray.length == 0) ? "#9e9156" : "#49b42e"
     return (
-        <ThemedView key={key} style={{ ...race_styles.raceDataContianer }}>
+        <ThemedView style={{ ...race_styles.raceDataContianer }}>
             <ThemedView style={{ ...race_styles.raceAndSchedule, backgroundColor: raceColor }}>
                 <ThemedText>Race {raceNum}</ThemedText>
                 <ThemedText>{schedule_timestamp}</ThemedText>
             </ThemedView>
             {
-                teamArray.map((team, ind: number) => {
+                teamArray.map((team, index: number) => {
                     let completedTimeOrDNF;
                     if (timeArray.length > 0) { // Check if Race has started yet
-                        completedTimeOrDNF = timeArray[ind] && timeArray[ind] != 'DNF' ? msToTime(timeArray[ind]) : 'DNF'
+                        completedTimeOrDNF = timeArray[index] && timeArray[index] != 'DNF' ? msToTime(timeArray[index]) : 'DNF'
                     } else {
                         completedTimeOrDNF = "TBD" // Yet to Race
                     }
                     return (
-                        <ThemedView key={raceNum + ' ' + key + ' ' + ind} style={race_styles.timesAndTeam}>
+                        <ThemedView key={raceNum + ' ' + index} style={race_styles.timesAndTeam}>
                             <ThemedText>{team}</ThemedText>
                             <ThemedText>{completedTimeOrDNF}</ThemedText>
                         </ThemedView>
